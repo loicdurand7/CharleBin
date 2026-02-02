@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PrivateBin
  *
@@ -26,21 +27,21 @@ class Request
      *
      * @const string
      */
-    const MIME_JSON = 'application/json';
+    public const MIME_JSON = 'application/json';
 
     /**
      * MIME type for HTML
      *
      * @const string
      */
-    const MIME_HTML = 'text/html';
+    public const MIME_HTML = 'text/html';
 
     /**
      * MIME type for XHTML
      *
      * @const string
      */
-    const MIME_XHTML = 'application/xhtml+xml';
+    public const MIME_XHTML = 'application/xhtml+xml';
 
     /**
      * Input stream to use for PUT parameter parsing
@@ -225,7 +226,7 @@ class Request
         return array_key_exists('REQUEST_URI', $_SERVER) ?
         htmlspecialchars(
             parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)
-            ) : '/';
+        ) : '/';
     }
 
     /**
@@ -281,7 +282,8 @@ class Request
             foreach ($mediaTypeRanges as $mediaTypeRange) {
                 if (preg_match(
                     '#(\*/\*|[a-z\-]+/[a-z\-+*]+(?:\s*;\s*[^q]\S*)*)(?:\s*;\s*q\s*=\s*(0(?:\.\d{0,3})|1(?:\.0{0,3})))?#',
-                    trim($mediaTypeRange), $match
+                    trim($mediaTypeRange),
+                    $match
                 )) {
                     if (!isset($match[2])) {
                         $match[2] = '1.0';

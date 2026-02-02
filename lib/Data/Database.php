@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PrivateBin
  *
@@ -127,7 +128,8 @@ class Database extends AbstractData
             }
         } else {
             throw new Exception(
-                'Missing configuration for key dsn, usr, pwd or opt in the section model_options, please check your configuration file', 6
+                'Missing configuration for key dsn, usr, pwd or opt in the section model_options, please check your configuration file',
+                6
             );
         }
     }
@@ -208,7 +210,9 @@ class Database extends AbstractData
         try {
             $row = $this->_select(
                 'SELECT * FROM "' . $this->_sanitizeIdentifier('paste') .
-                '" WHERE "dataid" = ?', array($pasteid), true
+                '" WHERE "dataid" = ?',
+                array($pasteid),
+                true
             );
         } catch (Exception $e) {
             $row = false;
@@ -270,11 +274,13 @@ class Database extends AbstractData
     {
         $this->_exec(
             'DELETE FROM "' . $this->_sanitizeIdentifier('paste') .
-            '" WHERE "dataid" = ?', array($pasteid)
+            '" WHERE "dataid" = ?',
+            array($pasteid)
         );
         $this->_exec(
             'DELETE FROM "' . $this->_sanitizeIdentifier('comment') .
-            '" WHERE "pasteid" = ?', array($pasteid)
+            '" WHERE "pasteid" = ?',
+            array($pasteid)
         );
     }
 
@@ -290,7 +296,9 @@ class Database extends AbstractData
         try {
             $row = $this->_select(
                 'SELECT "dataid" FROM "' . $this->_sanitizeIdentifier('paste') .
-                '" WHERE "dataid" = ?', array($pasteid), true
+                '" WHERE "dataid" = ?',
+                array($pasteid),
+                true
             );
         } catch (Exception $e) {
             return false;
@@ -355,7 +363,8 @@ class Database extends AbstractData
     {
         $rows = $this->_select(
             'SELECT * FROM "' . $this->_sanitizeIdentifier('comment') .
-            '" WHERE "pasteid" = ?', array($pasteid)
+            '" WHERE "pasteid" = ?',
+            array($pasteid)
         );
 
         // create comment list
@@ -401,7 +410,8 @@ class Database extends AbstractData
             return (bool) $this->_select(
                 'SELECT "dataid" FROM "' . $this->_sanitizeIdentifier('comment') .
                 '" WHERE "pasteid" = ? AND "parentid" = ? AND "dataid" = ?',
-                array($pasteid, $parentid, $commentid), true
+                array($pasteid, $parentid, $commentid),
+                true
             );
         } catch (Exception $e) {
             return false;
@@ -631,7 +641,8 @@ class Database extends AbstractData
                 break;
             default:
                 throw new Exception(
-                    "PDO type $type is currently not supported.", 5
+                    "PDO type $type is currently not supported.",
+                    5
                 );
         }
         return $sql;
@@ -649,7 +660,9 @@ class Database extends AbstractData
         try {
             $row = $this->_select(
                 'SELECT "value" FROM "' . $this->_sanitizeIdentifier('config') .
-                '" WHERE "id" = ?', array($key), true
+                '" WHERE "id" = ?',
+                array($key),
+                true
             );
         } catch (PDOException $e) {
             return '';

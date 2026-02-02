@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PrivateBin
  *
@@ -60,7 +61,9 @@ class YourlsProxy
         }
 
         $data = file_get_contents(
-            $yourls_api_url, false, stream_context_create(
+            $yourls_api_url,
+            false,
+            stream_context_create(
                 array(
                     'http' => array(
                         'method'  => 'POST',

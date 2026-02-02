@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PrivateBin
  *
@@ -28,21 +29,21 @@ class Controller
      *
      * @const string
      */
-    const VERSION = '1.5.1';
+    public const VERSION = '1.5.1';
 
     /**
      * minimal required PHP version
      *
      * @const string
      */
-    const MIN_PHP_VERSION = '5.6.0';
+    public const MIN_PHP_VERSION = '5.6.0';
 
     /**
      * show the same error message if the paste expired or does not exist
      *
      * @const string
      */
-    const GENERIC_ERROR = 'Paste does not exist, has expired or has been deleted.';
+    public const GENERIC_ERROR = 'Paste does not exist, has expired or has been deleted.';
 
     /**
      * configuration
@@ -161,9 +162,9 @@ class Controller
      */
     private function _init()
     {
-        $this->_conf    = new Configuration;
+        $this->_conf    = new Configuration();
         $this->_model   = new Model($this->_conf);
-        $this->_request = new Request;
+        $this->_request = new Request();
         $this->_urlBase = $this->_request->getRequestUri();
 
         // set default language
@@ -380,7 +381,7 @@ class Controller
             $this->_conf->getKey('cspheader')
         );
 
-        $page = new View;
+        $page = new View();
         $page->assign('CSPHEADER', $metacspheader);
         $page->assign('ERROR', I18n::_($this->_error));
         $page->assign('NAME', $this->_conf->getKey('name'));

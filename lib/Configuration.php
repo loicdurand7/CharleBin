@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PrivateBin
  *
@@ -222,7 +223,8 @@ class Configuration
 
         // support for old config file format, before the fork was renamed and PSR-4 introduced
         $this->_configuration['model']['class'] = str_replace(
-            'zerobin_', 'privatebin_',
+            'zerobin_',
+            'privatebin_',
             $this->_configuration['model']['class']
         );
 

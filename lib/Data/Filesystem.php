@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PrivateBin
  *
@@ -33,7 +34,7 @@ class Filesystem extends AbstractData
      * @link  https://man7.org/linux/man-pages/man7/glob.7.html
      * @const string
      */
-    const PASTE_FILE_PATTERN = DIRECTORY_SEPARATOR . '[a-f0-9][a-f0-9]' .
+    public const PASTE_FILE_PATTERN = DIRECTORY_SEPARATOR . '[a-f0-9][a-f0-9]' .
         DIRECTORY_SEPARATOR . '[a-f0-9][a-f0-9]' . DIRECTORY_SEPARATOR .
         '[a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9]' .
         '[a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9]*';
@@ -43,14 +44,14 @@ class Filesystem extends AbstractData
      *
      * @const string
      */
-    const PROTECTION_LINE = '<?php http_response_code(403); /*';
+    public const PROTECTION_LINE = '<?php http_response_code(403); /*';
 
     /**
      * line in generated .htaccess files, to protect exposed directories from being browsable on apache web servers
      *
      * @const string
      */
-    const HTACCESS_LINE = 'Require all denied';
+    public const HTACCESS_LINE = 'Require all denied';
 
     /**
      * path in which to persist something
@@ -229,7 +230,8 @@ class Filesystem extends AbstractData
 
                     // Store in array
                     $key            = $this->getOpenSlot(
-                        $comments, (
+                        $comments,
+                        (
                             (int) array_key_exists('created', $comment['meta']) ?
                             $comment['meta']['created'] : // v2 comments
                             $comment['meta']['postdate'] // v1 comments
