@@ -330,4 +330,3 @@ J’ai ainsi compris l’importance de :
 - La qualité et la lisibilité du code
 - L’automatisation des vérifications
 - Les tests robustes
-```
