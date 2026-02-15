@@ -302,18 +302,137 @@ describe("CharleBin - Create and retrieve paste", () => {
 
 ---
 
-### Extension : Application sur NetVOD
-
-**Mise en place de Cypress sur la SAE NetVOD :**
-- Test accès page d’accueil
-- Navigation vers une fiche série
-- Vérification du titre affiché
-- Test du formulaire de connexion
 
 **Conclusion :**
 Les tests E2E simulent un utilisateur réel et garantissent la fiabilité des fonctionnalités web.
 
 ---
+
+### Extension : Application sur NetVOD
+
+# Tests unitaires -- SAE NetVOD
+
+Après avoir réalisé des tests sur CharleBin, j'ai effectué des **tests
+unitaires sur la SAE NetVOD** pour mieux comprendre comment tester un
+projet Web en PHP avec **PHPUnit**.
+
+------------------------------------------------------------------------
+
+## Structure des tests
+
+J'ai créé un dossier `test/` dans le projet et implémenté **deux
+fichiers de test** :
+
+### 1. TestDispatcher.php (4 tests)
+
+Tests d'intégration du **routage Dispatcher** et génération HTML :
+
+-   `testCatalogueAction()` : routage vers `CatalogueAction`
+-   `testRegisterAction()` : affichage formulaire inscription
+-   `testDefaultAction()` : fallback vers `HomeAction`
+-   `testLogoutAction()` : génération HTML déconnexion
+
+------------------------------------------------------------------------
+
+### 2. TestRepository.php (4 tests)
+
+Tests unitaires **Repository** avec BDD SQLite temporaire :
+
+-   `testInsertAndGetHashUser()` : insertion + récupération hash
+    utilisateur
+-   `testGetHashUserReturnsNull()` : utilisateur inexistant → `null`
+-   `testAddSeriesToFavorites()` : ajout série aux favoris
+-   `testRemoveSeriesFromFavorites()` : suppression favoris
+
+------------------------------------------------------------------------
+
+## Modifications apportées à NetVOD
+
+### TestDispatcher
+
+-   `Action::__construct()` : `$_SERVER['REQUEST_METHOD'] ?? 'GET'`
+-   `TestDispatcher::setUp()` : `$_SERVER['REQUEST_METHOD'] = 'GET'`
+-   Neutralisation `session_start()` dans Dispatcher / Actions
+-   Mock `Repository::$instance` via `ReflectionProperty` (propriété
+    private)
+-   Output buffering : `ob_start()` / `ob_get_contents()` /
+    `ob_end_clean()`
+
+------------------------------------------------------------------------
+
+### TestRepository
+
+-   BDD SQLite temporaire : `test.db` (créée / supprimée
+    automatiquement)
+-   Schéma minimal : tables `user` + `favoris`
+-   Configuration : `dbtest.config.ini` pour SQLite
+-   Nettoyage : `tearDown()` + Reflection pour reset
+    `Repository::$instance`
+
+------------------------------------------------------------------------
+
+## Problèmes rencontrés
+
+  ---------------------------------------------------------------------------------------------------------------
+  Composant -->                 Problème -->                                  Solution
+  ------------------------- ----------------------------------------- -------------------------------------------
+  **Dispatcher**   -->         `Undefined array key "REQUEST_METHOD"`  -->  `$_SERVER ?? 'GET'` + `setUp()`
+
+  **Dispatcher**    -->        `session_start(): headers already sent`  --> Suppression `session_start()` +
+                                                                      `ob_start()`
+
+  **Dispatcher**      -->      `Cannot modify header information`    -->    Neutralisation `header()` dans `catch`
+
+  **Dispatcher**      -->      `Repository::$instance private`      -->     `ReflectionProperty::setAccessible(true)`
+
+  **Repository**            BDD non initialisée                       SQLite + schéma `CREATE TABLE`
+  ---------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+## Commandes d'exécution
+
+``` bash
+# Windows
+php vendor/bin/phpunit test/TestDispatcher.php
+php vendor/bin/phpunit test/TestRepository.php
+
+# Linux / Mac
+./vendor/bin/phpunit test/TestDispatcher.php
+./vendor/bin/phpunit test/TestRepository.php
+```
+
+------------------------------------------------------------------------
+
+## Résultats
+
+    TestDispatcher : OK (4 tests, 4 assertions) 
+    TestRepository : OK (4 tests, 4 assertions) 
+
+    TOTAL : 8 tests, 8 assertions réussis
+
+------------------------------------------------------------------------
+
+## Fichiers fournis
+
+    test/
+    ├── TestDispatcher.php     # Tests routage + mock Reflection
+    ├── TestRepository.php     # Tests BDD SQLite
+    ├── dbtest.config.ini      # Config SQLite Repository
+    └── test.db                # BDD temporaire (auto-générée)
+
+------------------------------------------------------------------------
+
+## Couverture validée
+
+  Couche       Fonctionnalités testées
+  ------------ -------------------------------------------------
+  Dispatcher   Routage 4 actions, génération HTML, gestion CLI
+  Repository   CRUD users, gestion favoris, singleton pattern
+  Actions      Exécution sans crash (mock dependencies)
+
+------------------------------------------------------------------------
+
 
 ## Conclusion générale
 
